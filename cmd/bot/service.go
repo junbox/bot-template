@@ -10,8 +10,8 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func StartBot(ch chan models.Task, states *statemanagment.StateRepo, users *map[int]*models.User) {
-	bot, err := tgbotapi.NewBotAPI("7648853295:AAHlSwwmpSMPk9f8pltEyo1N9jGt2YgiFuY")
+func StartBot(ch chan models.Task, states *statemanagment.StateRepo, users *map[int]*models.User, BOT_TOKEN string) {
+	bot, err := tgbotapi.NewBotAPI(BOT_TOKEN)
 	if err != nil {
 		log.Panic(err)
 	}
