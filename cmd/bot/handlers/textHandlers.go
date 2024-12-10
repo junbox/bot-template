@@ -9,7 +9,7 @@ import (
 )
 
 func MessageRouter(bot *tgbotapi.BotAPI, update *tgbotapi.Update, states *statemanagment.StateRepo, users *map[int]*models.User) {
-	msg := statemanagment.GetReply(bot, update, states)
+	msg := statemanagment.GetReply(bot, update, states, users)
 
 	_, err := bot.Send(msg)
 	if err != nil {

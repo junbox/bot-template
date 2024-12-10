@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	TOKEN = "???"
+	TOKEN := "7168400548:AAHzQgzM6O7EQ3XtebXO-rurz0FtE21x9io"
 	users := make(map[int]*models.User)
 	states := sm.StateRepo{
 		States: make(map[int]*sm.UserState),

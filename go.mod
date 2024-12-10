@@ -1,6 +1,6 @@
 module github.com/lex3man/playground
 
-go 1.23.3
+go 1.23.2
 
 require (
 	github.com/bytedance/sonic v1.12.5 // indirect

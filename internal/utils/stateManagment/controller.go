@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/lex3man/playground/internal/models"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func GetReply(bot *tgbotapi.BotAPI, update *tgbotapi.Update, states *StateRepo) tgbotapi.MessageConfig {
+func GetReply(bot *tgbotapi.BotAPI, update *tgbotapi.Update, states *StateRepo, users *map[int]*models.User) tgbotapi.MessageConfig {
 	userID := int(update.Message.From.ID)
 	userReply := update.Message.Text
 	var kb tgbotapi.ReplyKeyboardMarkup
@@ -50,6 +52,11 @@ func GetReply(bot *tgbotapi.BotAPI, update *tgbotapi.Update, states *StateRepo) 
 		case "finish":
 			states.SetDefault(userID)
 			msgReply = "Я тебя запомнил!"
+			user := *(*users)[userID]
+			user.Name = states.GetVar(userID, "name")
+			user.City = states.GetVar(userID, "city")
+			fmt.Println(user)
+			user.AddAchivment("HAPPY REGISTRATION")
 		default:
 			msgReply = "???"
 		}
@@ -61,6 +68,12 @@ func GetReply(bot *tgbotapi.BotAPI, update *tgbotapi.Update, states *StateRepo) 
 			states.States[userID].Step = "name"
 		case "привет":
 			msgReply = "Ну привет! Давай я расскажу тебе..."
+			isRemoveKeyboard.Selective = false
+			kb = tgbotapi.NewReplyKeyboard(
+				tgbotapi.NewKeyboardButtonRow(
+					tgbotapi.NewKeyboardButton("Зарегистрироваться"),
+				),
+			)
 		case "пока!":
 			msgReply = "Может я всё таки могу тебе как-то помочь?"
 			isRemoveKeyboard.Selective = false
@@ -81,7 +94,6 @@ func GetReply(bot *tgbotapi.BotAPI, update *tgbotapi.Update, states *StateRepo) 
 	}
 
 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, msgReply)
-	// msg.ReplyToMessageID = update.Message.MessageID
 	if isRemoveKeyboard.Selective {
 		msg.ReplyMarkup = isRemoveKeyboard
 	} else {

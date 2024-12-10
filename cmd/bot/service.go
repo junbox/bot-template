@@ -28,7 +28,7 @@ func StartBot(ch chan models.Task, states *statemanagment.StateRepo, users *map[
 	for update := range updates {
 		if update.Message != nil {
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-			if update.Message.Text[0] == '/' {
+			if update.Message.Command() == "start" {
 				handlers.CommandRouter(bot, &update, states, users)
 			} else {
 				handlers.MessageRouter(bot, &update, states, users)

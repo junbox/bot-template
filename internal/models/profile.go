@@ -1,4 +1,4 @@
-package statemanagment
+package models
 
 import "time"
 

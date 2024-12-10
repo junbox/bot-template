@@ -13,8 +13,8 @@ func CommandRouter(bot *tgbotapi.BotAPI, update *tgbotapi.Update, states *statem
 	var msgText string
 	isRemoveKeyboard := tgbotapi.NewRemoveKeyboard(true)
 
-	switch update.Message.Text {
-	case "/start":
+	switch update.Message.Command() {
+	case "start":
 		isRemoveKeyboard.Selective = false
 		kb = tgbotapi.NewReplyKeyboard(
 			tgbotapi.NewKeyboardButtonRow(
@@ -24,13 +24,15 @@ func CommandRouter(bot *tgbotapi.BotAPI, update *tgbotapi.Update, states *statem
 		)
 		states.SetDefault(int(update.Message.From.ID))
 		msgText = "Чего тебе?"
+		user := models.User{}
+		user.Init(int(update.Message.From.ID), update.Message.From.UserName)
+		(*users)[int(update.Message.From.ID)] = &user
 	default:
 		isRemoveKeyboard.Selective = true
 		msgText = "Не знаю такую команду"
 	}
 
 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, msgText)
-	// msg.ReplyToMessageID = update.Message.MessageID
 	if !isRemoveKeyboard.Selective {
 		msg.ReplyMarkup = kb
 	} else {

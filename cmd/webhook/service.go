@@ -1,6 +1,7 @@
 package webhook
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -17,8 +18,21 @@ func StartHook(ch chan models.Task, states *statemanagment.StateRepo, users *map
 			"message": "pong",
 		})
 	})
+	r.POST("/achivment", func(c *gin.Context) {
+
+		fmt.Println(*users)
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "achivment",
+		})
+	})
 	err := r.Run()
 	if err != nil {
 		log.Panic("Bot not started!!!")
 	}
+}
+
+type UserAchivment struct {
+	UserID string `json:"userID"`
+	Tag    string `json:"tag"`
 }

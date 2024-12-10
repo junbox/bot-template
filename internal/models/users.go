@@ -1,6 +1,6 @@
 package models
 
-import statemanagment "github.com/lex3man/playground/internal/utils/stateManagment"
+// import statemanagment "github.com/lex3man/playground/internal/utils/stateManagment"
 
 type User struct {
 	ID        int
@@ -9,11 +9,11 @@ type User struct {
 	City      string
 	Login     string
 	PswdHache string
-	Profile   *statemanagment.Profile
+	Profile   *Profile
 }
 
 func (u User) Init(id int, username string) User {
-	prof := statemanagment.Profile{}
+	prof := Profile{}
 	prof.Init()
 	return User{
 		ID:        id,
@@ -35,7 +35,11 @@ func (u *User) SetStatus(status string) {
 }
 
 func (u *User) AddAchivment(caption string) {
-	newTag := statemanagment.Tag{
+	if u.Profile == nil {
+		u.Profile = &Profile{}
+		u.Profile.Init()
+	}
+	newTag := Tag{
 		Caption: caption,
 	}
 	u.Profile.Achives = append(u.Profile.Achives, newTag)
