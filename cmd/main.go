@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	TOKEN = "???"
 	users := make(map[int]*models.User)
 	states := sm.StateRepo{
 		States: make(map[int]*sm.UserState),
@@ -16,5 +17,5 @@ func main() {
 	states.States[0] = &sm.UserState{}
 	ch := make(chan models.Task)
 	go webhook.StartHook(ch, &states, &users)
-	bot.StartBot(ch, &states, &users)
+	bot.StartBot(ch, &states, &users, TOKEN)
 }
